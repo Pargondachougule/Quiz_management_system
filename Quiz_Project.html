@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Data Structures Quiz — 5×12</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #111827;
+      --muted: #94a3b8;
+      --accent: #22c55e;
+      --danger: #ef4444;
+      --border: #1f2937;
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial;
+      background: linear-gradient(120deg, #0b1220, #0a111d);
+      color: #e5e7eb
+    }
+
+    .container {
+      max-width: 980px;
+      margin: 32px auto;
+      padding: 16px
+    }
+
+    .card {
+      background: rgba(17, 24, 39, 0.9);
+      backdrop-filter: saturate(120%) blur(6px);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .35)
+    }
+
+    .card header {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between
+    }
+
+    .card main {
+      padding: 20px
+    }
+
+    h1 {
+      font-size: clamp(22px, 3.6vw, 32px);
+      margin: 0
+    }
+
+    h2 {
+      margin: 8px 0 16px;
+      font-size: 20px;
+      color: #f3f4f6
+    }
+
+    p,
+    label,
+    li,
+    input,
+    button,
+    select {
+      font-size: 16px
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: #0b1220;
+      color: #e5e7eb;
+      outline: none
+    }
+
+    input:focus,
+    select:focus {
+      border-color: #334155;
+      box-shadow: 0 0 0 3px rgba(51, 65, 85, 0.35)
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap
+    }
+
+    button {
+      padding: 10px 16px;
+      border-radius: 12px;
+      border: 1px solid #2a3342;
+      background: #0b1220;
+      color: #e5e7eb;
+      cursor: pointer
+    }
+
+    .primary {
+      background: var(--accent);
+      border-color: #16a34a;
+      color: #052e16;
+      font-weight: 700
+    }
+
+    .danger {
+      background: var(--danger);
+      border-color: #dc2626;
+      color: #fff
+    }
+
+    .muted {
+      color: var(--muted)
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px
+    }
+
+    .hidden {
+      display: none
+    }
+
+    .q {
+      padding: 14px 14px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      margin-bottom: 16px;
+      background: #0b1220
+    }
+
+    .q h3 {
+      margin: 0 0 10px;
+      font-size: 18px
+    }
+
+    .opt {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      padding: 10px;
+      border: 1px solid #1e293b;
+      border-radius: 10px;
+      margin: 8px 0;
+      background: #0b1220
+    }
+
+    .opt input {
+      width: auto
+    }
+
+    .pill {
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+      background: #0b1220;
+      border: 1px solid var(--border);
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 13px
+    }
+
+    .grid {
+      display: grid;
+      gap: 14px
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse
+    }
+
+    th,
+    td {
+      padding: 10px;
+      border-bottom: 1px solid var(--border);
+      text-align: left
+    }
+
+    .right {
+      color: #22c55e;
+      font-weight: 700
+    }
+
+    .wrong {
+      color: #ef4444;
+      font-weight: 700
+    }
+
+    .topbar {
+      display: flex;
+      gap: 10px;
+      align-items: center
+    }
+
+    .spacer {
+      flex: 1
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="card" id="app">
+      <header>
+        <div class="topbar">
+          <h1>Data Structures Quiz</h1>
+          <span class="pill" id="user-pill" title="Logged in user" style="display:none"></span>
+        </div>
+        <div class="actions">
+          <button id="btn-logout" class="danger hidden">Logout</button>
+        </div>
+      </header>
+      <main>
+        <!-- Auth View -->
+        <section id="auth-view">
+          <h2>Login</h2>
+          <div class="row">
+            <div>
+              <label>Username</label>
+              <input id="auth-username" placeholder="Enter username" />
+            </div>
+            <div>
+              <label>Password</label>
+              <input id="auth-password" type="password" placeholder="Enter password" />
+            </div>
+          </div>
+          <div class="actions" style="margin-top:12px">
+            <button id="btn-login" class="primary">Login</button>
+            <button id="btn-register">Register</button>
+          </div>
+          <p class="muted" style="margin-top:8px">Tip: You can create multiple users. Credentials are stored locally in
+            your browser for demo purposes.</p>
+        </section>
+
+        <!-- Register View -->
+        <section id="register-view" class="hidden">
+          <h2>Register</h2>
+          <div class="row">
+            <div>
+              <label>Name</label>
+              <input id="reg-name" placeholder="Enter full name" />
+            </div>
+            <div>
+              <label>College Name</label>
+              <input id="reg-col" placeholder="Enter college name" />
+            </div>
+            <div>
+              <label>Branch</label>
+              <input id="reg-branch" placeholder="Enter branch" />
+            </div>
+            <div>
+              <label>Division</label>
+              <input id="reg-div" placeholder="Enter division" />
+            </div>
+            <div>
+              <label>Roll No</label>
+              <input id="reg-roll" placeholder="Enter roll number" />
+            </div>
+            <div>
+              <label>Username</label>
+              <input id="reg-username" placeholder="Choose a username" />
+            </div>
+            <div>
+              <label>Password</label>
+              <input id="reg-password" type="password" placeholder="Choose a password" />
+            </div>
+          </div>
+          <div class="actions" style="margin-top:16px">
+            <button id="btn-submit-register" class="primary">Submit Registration</button>
+            <button id="btn-back-login">Back to Login</button>
+          </div>
+        </section>
+
+        <!-- Dashboard View -->
+        <section id="dash-view" class="hidden">
+          <h2>Choose a Chapter (12 marks each)</h2>
+          <div class="grid">
+            <select id="chapter-select">
+              <option value="">— Select Chapter —</option>
+            </select>
+            <div class="actions">
+              <button id="btn-start" class="primary">Start Quiz</button>
+              <button id="btn-view-results">My Results</button>
+              <button id="btn-clear-results">Clear My Results</button>
+            </div>
+          </div>
+          <h2 style="margin-top:16px">Recent Scores</h2>
+          <div id="recent-scores"></div>
+        </section>
+
+        <!-- Quiz View -->
+        <section id="quiz-view" class="hidden">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+            <span class="pill" id="chapter-pill"></span>
+            <span class="pill" id="progress-pill">Q 1 / 12</span>
+            <span class="spacer"></span>
+            <span class="pill" id="timer-pill" title="Time spent">00:00</span>
+          </div>
+          <div class="q">
+            <h3 id="q-text">Question text</h3>
+            <div id="q-options"></div>
+          </div>
+          <div class="actions">
+            <button id="btn-prev">Previous</button>
+            <button id="btn-next">Next</button>
+            <button id="btn-submit" class="primary">Submit Chapter</button>
+          </div>
+        </section>
+
+        <!-- Results View -->
+        <section id="result-view" class="hidden">
+          <h2 id="result-title">Result</h2>
+          <p id="result-summary"></p>
+          <table id="result-table"></table>
+          <div class="actions" style="margin-top:12px">
+            <button id="btn-back-dash" class="primary">Back to Chapters</button>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    /******************** Data: 5×12 Data Structures ********************/
+    const QUIZ_DATA = [
+      {
+        id: 'arrays', title: 'Chapter 1 — Arrays', questions: [
+          { q: 'What is the time complexity to access an element by index in an array?', opts: ['O(1)', 'O(log n)', 'O(n)', 'O(n log n)'], a: 0 },
+          { q: 'Which structure is contiguous in memory?', opts: ['Linked List', 'Array', 'Binary Tree', 'Graph'], a: 1 },
+          { q: 'In a dynamic array (like ArrayList), amortized cost of appending is:', opts: ['O(n)', 'O(log n)', 'O(1)', 'O(n^2)'], a: 2 },
+          { q: 'Array index of the first element is usually:', opts: ['1', '0', '-1', 'Depends on language only'], a: 1 },
+          { q: 'Best data structure for random access:', opts: ['Array', 'Queue', 'Stack', 'Singly Linked List'], a: 0 },
+          { q: 'To insert in the middle of a plain array (shifting required) costs:', opts: ['O(1)', 'O(log n)', 'O(n)', 'O(n log n)'], a: 2 },
+          { q: 'A 2D array arr[r][c] is stored in row-major order. Address formula uses:', opts: ['Row offset first', 'Column offset first', 'Both equal', 'Neither'], a: 0 },
+          { q: 'Which operation is cheapest in a fixed-size array?', opts: ['Middle insertion', 'Deletion anywhere', 'Read by index', 'Grow capacity'], a: 2 },
+          { q: 'Binary search requires:', opts: ['Hashing', 'Sorted array', 'Balanced tree', 'Graph'], a: 1 },
+          { q: 'The number of elements in array A[5] is:', opts: ['4', '5', '6', 'Unknown'], a: 1 },
+          { q: 'Which is NOT true about arrays?', opts: ['Constant-time indexing', 'Cache-friendly', 'Automatic resizing always', 'Fixed layout'], a: 2 },
+          { q: 'Rotate array right by k can be done in O(n) using:', opts: ['Three reversals', 'Heap', 'Queue only', 'DFS'], a: 0 }
+        ]
+      },
+      {
+        id: 'linked', title: 'Chapter 2 — Linked Lists', questions: [
+          { q: 'A singly linked list node contains:', opts: ['Data only', 'Data + next pointer', 'Data + two pointers', 'Index only'], a: 1 },
+          { q: 'Insert at head in a singly linked list is:', opts: ['O(n)', 'O(1)', 'O(log n)', 'O(n log n)'], a: 1 },
+          { q: 'To find length of a singly linked list you need:', opts: ['Constant time', 'Traverse nodes', 'Array index', 'Hash map'], a: 1 },
+          { q: 'Which supports efficient insertion/deletion in middle if pointer given?', opts: ['Array', 'Singly Linked List', 'Static array', 'String'], a: 1 },
+          { q: 'Detect cycle in a list using:', opts: ['Floyd’s tortoise-hare', 'BFS', 'Inorder traversal', 'Counting sort'], a: 0 },
+          { q: 'Deleting a node given only pointer to that node (not tail) can be done by:', opts: ['Copy next data & bypass', 'Impossible', 'Reverse list first', 'Use stack'], a: 0 },
+          { q: 'Doubly linked list enables:', opts: ['Only forward traversal', 'Both directions', 'Random indexing', 'Matrix ops'], a: 1 },
+          { q: 'Tail pointer helps in:', opts: ['O(1) delete head', 'O(1) insert at tail', 'O(1) find middle', 'O(1) index by position'], a: 1 },
+          { q: 'Space overhead of linked list compared to array is due to:', opts: ['Padding', 'Pointers/References', 'Alignment only', 'No overhead'], a: 1 },
+          { q: 'Which operation is O(n) in singly list without extra info?', opts: ['Insert at head', 'Delete head', 'Search by value', 'Access head'], a: 2 },
+          { q: 'A circular linked list’s last node points to:', opts: ['Null', 'Head', 'Random node', 'Self'], a: 1 },
+          { q: 'Skip list improves search time on average to:', opts: ['O(1)', 'O(log n)', 'O(n)', 'O(n log n)'], a: 1 }
+        ]
+      },
+      {
+        id: 'stackqueue', title: 'Chapter 3 — Stacks & Queues', questions: [
+          { q: 'Stack follows which principle?', opts: ['FIFO', 'LIFO', 'LILO', 'RIFO'], a: 1 },
+          { q: 'Function call/recursion typically uses:', opts: ['Queue', 'Deque', 'Stack', 'Array only'], a: 2 },
+          { q: 'Queue primary operations are:', opts: ['push/pop', 'enqueue/dequeue', 'insert/delete', 'top/min'], a: 1 },
+          { q: 'Balanced parentheses checking commonly uses:', opts: ['Stack', 'Queue', 'Graph', 'Heap'], a: 0 },
+          { q: 'Circular queue helps to:', opts: ['Avoid overflow with unused slots', 'Sort quickly', 'Balance tree', 'Hash better'], a: 0 },
+          { q: 'Min-stack supports getMin in:', opts: ['O(n)', 'O(log n)', 'O(1)', 'O(n log n)'], a: 2 },
+          { q: 'Deque supports insertion/deletion at:', opts: ['Front only', 'Rear only', 'Both ends', 'Random index'], a: 2 },
+          { q: 'Postfix expression evaluation uses:', opts: ['Queue', 'Stack', 'DP table', 'Trie'], a: 1 },
+          { q: 'k queues in a single array technique relies on:', opts: ['Free list', 'Binary heap', 'Hashing', 'BST'], a: 0 },
+          { q: 'When queue uses two stacks, enqueue is O(1) amortized by:', opts: ['Rehashing', 'Occasional transfers', 'Path compression', 'Heapify'], a: 1 },
+          { q: 'Which application uses BFS and hence a queue?', opts: ['Shortest path (unweighted)', 'Inorder traversal', 'Dijkstra with heap', 'Union-Find'], a: 0 },
+          { q: 'Stack overflow occurs when:', opts: ['Top goes below 0', 'Top exceeds capacity', 'Queue is full', 'Array sorted'], a: 1 }
+        ]
+      },
+      {
+        id: 'trees', title: 'Chapter 4 — Trees', questions: [
+          { q: 'A binary tree node has at most:', opts: ['1 child', '2 children', '3 children', 'Unlimited'], a: 1 },
+          { q: 'Height of a tree with single node is often:', opts: ['0', '1', '2', '-1'], a: 0 },
+          { q: 'In-order traversal of BST yields:', opts: ['Random order', 'Sorted order', 'Reverse level order', 'Preorder'], a: 1 },
+          { q: 'A full binary tree has nodes with:', opts: ['0 or 2 children', 'At least 1 child', 'Only 1 child', '3 children'], a: 0 },
+          { q: 'AVL trees maintain:', opts: ['Red/black coloring', 'Balance factor ∈ {−1,0,1}', 'Heap order', 'Trie structure'], a: 1 },
+          { q: 'Heap supports efficient:', opts: ['Search by value', 'Get min/max', 'Inorder traversal', 'Hashing'], a: 1 },
+          { q: 'Number of null pointers in a non-empty full binary tree with n internal nodes:', opts: ['n', 'n+1', '2n', '2n+1'], a: 3 },
+          { q: 'Postorder is useful for:', opts: ['Copy tree', 'Evaluate expression tree', 'Level-by-level printing', 'Find height only'], a: 1 },
+          { q: 'B-Tree is optimized for:', opts: ['RAM access', 'Disk/IO blocks', 'Graphics', 'Networking'], a: 1 },
+          { q: 'Red-Black tree guarantees height is O(log n) by:', opts: ['Strict BST property', 'Coloring with invariants', 'Heapifying levels', 'Hashing'], a: 1 },
+          { q: 'In a max-heap, the root contains:', opts: ['Minimum', 'Median', 'Maximum', 'Random'], a: 2 },
+          { q: 'A complete binary tree is filled:', opts: ['Level by level from right', 'Level by level from left', 'Only leaves leftmost', 'Randomly'], a: 1 }
+        ]
+      },
+      {
+        id: 'graphs', title: 'Chapter 5 — Graphs', questions: [
+          { q: 'An undirected graph with V vertices, maximum edges is:', opts: ['V', 'V-1', 'V(V-1)/2', 'V^2'], a: 2 },
+          { q: 'Adjacency list is better than adjacency matrix when graph is:', opts: ['Dense', 'Sparse', 'Complete', 'Regular'], a: 1 },
+          { q: 'BFS explores neighbors by using a:', opts: ['Stack', 'Queue', 'Priority queue', 'Set'], a: 1 },
+          { q: 'DFS can be implemented with:', opts: ['Queue only', 'Stack/recursion', 'Heap', 'Union-Find'], a: 1 },
+          { q: 'Topological sort applies to:', opts: ['Undirected graphs', 'Cyclic directed graphs', 'DAGs', 'Trees only'], a: 2 },
+          { q: 'Dijkstra’s algorithm fails with negative edges unless using:', opts: ['Bellman–Ford', 'Prim’s', 'Kruskal’s', 'BFS'], a: 0 },
+          { q: 'Minimum Spanning Tree of a connected weighted graph has:', opts: ['Minimum total weight', 'Minimum edges only', 'No cycles and may be disconnected', 'All shortest paths'], a: 0 },
+          { q: 'Which algorithms build MST?', opts: ['Prim and Kruskal', 'Dijkstra and Floyd', 'KMP and Z', 'A* and IDA*'], a: 0 },
+          { q: 'A graph with a cycle reachable from a node is:', opts: ['Acyclic', 'Cyclic', 'Tree', 'Bipartite for sure'], a: 1 },
+          { q: 'A bipartite graph has chromatic number:', opts: ['1', '2', '3', 'Depends > 2'], a: 1 },
+          { q: 'Which detects strongly connected components?', opts: ['Kahn’s', 'Kosaraju/Tarjan', 'Prim’s', 'Kruskal’s'], a: 1 },
+          { q: 'If |E| ≫ |V|, the graph is:', opts: ['Sparse', 'Dense', 'Planar', 'Bipartite'], a: 1 }
+        ]
+      }
+    ];
+
+    /******************** Persistence Helpers ********************/
+    const KEYS = {
+      users: 'dsq_users', // array of {u,p}
+      session: 'dsq_session', // username
+      results: 'dsq_results'  // map per user: { username: { [chapterId]: {score, answers:[...], timeSec, date} } }
+    };
+
+    function loadUsers() { return JSON.parse(localStorage.getItem(KEYS.users) || '[]'); }
+    function saveUsers(arr) { localStorage.setItem(KEYS.users, JSON.stringify(arr)); }
+    function getResults() { return JSON.parse(localStorage.getItem(KEYS.results) || '{}'); }
+    function saveResults(obj) { localStorage.setItem(KEYS.results, JSON.stringify(obj)); }
+
+    /******************** State ********************/
+    let state = { user: null, chapter: null, idx: 0, answers: Array(12).fill(null), startTs: null, timerId: null };
+
+    /******************** DOM ********************/
+    const $ = sel => document.querySelector(sel);
+    const authView = $('#auth-view');
+    const dashView = $('#dash-view');
+    const quizView = $('#quiz-view');
+    const resView = $('#result-view');
+
+    /******************** Auth ********************/
+    $('#btn-login').onclick = () => {
+      const u = $('#auth-username').value.trim();
+      const p = $('#auth-password').value;
+      if (!u || !p) return alert('Enter username and password');
+      const users = loadUsers();
+      const ok = users.find(x => x.u === u && x.p === p);
+      if (!ok) return alert('Invalid credentials');
+      localStorage.setItem(KEYS.session, u);
+      initAfterLogin(u);
+    };
+
+    $('#btn-register').onclick = () => {
+      authView.classList.add('hidden');
+      $('#register-view').classList.remove('hidden');
+    };
+
+    $('#btn-back-login').onclick = () => {
+      $('#register-view').classList.add('hidden');
+      authView.classList.remove('hidden');
+    };
+
+    $('#btn-submit-register').onclick = () => {
+      const name = $('#reg-name').value.trim();
+      const col = $('#reg-col').value.trim();
+      const branch = $('#reg-branch').value.trim();
+      const div = $('#reg-div').value.trim();
+      const roll = $('#reg-roll').value.trim();
+      const u = $('#reg-username').value.trim();
+      const p = $('#reg-password').value;
+
+      if (!name || !col || !branch || !div || !roll || !u || !p) {
+        return alert('Please fill all fields');
+      }
+
+      const users = loadUsers();
+      if (users.some(x => x.u === u)) return alert('Username already exists');
+
+      users.push({ u, p, name, col, branch, div, roll });
+      saveUsers(users);
+      localStorage.setItem(KEYS.session, u);
+
+      $('#register-view').classList.add('hidden');
+      initAfterLogin(u);
+    };
+
+    $('#btn-logout').onclick = () => { localStorage.removeItem(KEYS.session); location.reload(); };
+
+    function initAfterLogin(u) {
+      state.user = u;
+      $('#user-pill').style.display = 'inline-flex';
+      $('#user-pill').textContent = 'User: ' + u;
+      $('#btn-logout').classList.remove('hidden');
+      authView.classList.add('hidden');
+      dashView.classList.remove('hidden');
+      buildChapterSelect();
+      renderRecentScores();
+    }
+
+    /******************** Dashboard ********************/
+    function buildChapterSelect() {
+      const sel = $('#chapter-select');
+      sel.innerHTML = '<option value="">— Select Chapter —</option>' +
+        QUIZ_DATA.map((c, i) => `<option value="${c.id}">${c.title}</option>`).join('');
+    }
+
+    $('#btn-start').onclick = () => {
+      const id = $('#chapter-select').value;
+      if (!id) return alert('Select a chapter');
+      startQuiz(id);
+    };
+
+    $('#btn-view-results').onclick = () => showMyResultsTable();
+    $('#btn-clear-results').onclick = () => { if (confirm('Clear your stored results?')) { const R = getResults(); delete R[state.user]; saveResults(R); renderRecentScores(); alert('Cleared.'); } }
+
+    function renderRecentScores() {
+      const R = getResults();
+      const mine = R[state.user] || {};
+      let html = '<table><tr><th>Chapter</th><th>Score</th><th>Taken On</th><th>Time</th></tr>';
+      QUIZ_DATA.forEach(c => {
+        const r = mine[c.id];
+        html += `<tr><td>${c.title}</td><td>${r ? r.score + '/12' : '—'}</td><td>${r ? new Date(r.date).toLocaleString() : '—'}</td><td>${r ? fmtTime(r.timeSec) : '—'}</td></tr>`;
+      });
+      html += '</table>';
+      $('#recent-scores').innerHTML = html;
+    }
+
+    /******************** Quiz Flow ********************/
+    function startQuiz(chapterId) {
+      state.chapter = QUIZ_DATA.find(c => c.id === chapterId);
+      state.idx = 0; state.answers = Array(12).fill(null); state.startTs = Date.now();
+      if (state.timerId) clearInterval(state.timerId);
+      state.timerId = setInterval(() => { $('#timer-pill').textContent = fmtTime(Math.floor((Date.now() - state.startTs) / 1000)); }, 1000);
+      $('#chapter-pill').textContent = state.chapter.title;
+      $('#progress-pill').textContent = `Q 1 / 12`;
+      dashView.classList.add('hidden'); resView.classList.add('hidden'); quizView.classList.remove('hidden');
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      const q = state.chapter.questions[state.idx];
+      $('#q-text').textContent = q.q;
+      const chosen = state.answers[state.idx];
+      $('#q-options').innerHTML = q.opts.map((t, i) => `
+    <label class="opt">
+      <input type="radio" name="opt" value="${i}" ${chosen === i ? 'checked' : ''}/> <span>${t}</span>
+    </label>`).join('');
+      $('#progress-pill').textContent = `Q ${state.idx + 1} / 12`;
+    }
+
+    $('#q-options').addEventListener('change', (e) => {
+      if (e.target && e.target.name === 'opt') { state.answers[state.idx] = Number(e.target.value); }
+    });
+
+    $('#btn-next').onclick = () => { if (state.idx < 11) { state.idx++; renderQuestion(); } };
+    $('#btn-prev').onclick = () => { if (state.idx > 0) { state.idx--; renderQuestion(); } };
+    $('#btn-submit').onclick = submitQuiz;
+
+    function submitQuiz() {
+      if (state.answers.some(v => v === null)) {
+        if (!confirm('Some questions are unanswered. Submit anyway?')) return;
+      }
+      clearInterval(state.timerId);
+      const timeSec = Math.floor((Date.now() - state.startTs) / 1000);
+      let score = 0;
+      state.chapter.questions.forEach((q, i) => { if (state.answers[i] === q.a) score++; });
+      // Store
+      const R = getResults();
+      R[state.user] = R[state.user] || {};
+      R[state.user][state.chapter.id] = { score, answers: state.answers, timeSec, date: new Date().toISOString() };
+      saveResults(R);
+      // Show results
+      showResult(score, timeSec);
+      renderRecentScores();
+    }
+
+    function showResult(score, timeSec) {
+      quizView.classList.add('hidden');
+      resView.classList.remove('hidden');
+      $('#result-title').textContent = `${state.chapter.title} — Result`;
+      $('#result-summary').innerHTML = `<strong>${state.user}</strong>, you scored <strong>${score}/12</strong>. Time: <strong>${fmtTime(timeSec)}</strong>.`;
+      const rows = state.chapter.questions.map((q, i) => {
+        const correct = q.a;
+        const ans = state.answers[i];
+        const cls = ans === correct ? 'right' : 'wrong';
+        const your = ans == null ? '—' : q.opts[ans];
+        return `<tr><td>${i + 1}</td><td>${q.q}</td><td>${q.opts[correct]}</td><td class="${cls}">${your}</td></tr>`;
+      });
+      $('#result-table').innerHTML = `<tr><th>#</th><th>Question</th><th>Correct</th><th>Your Answer</th></tr>` + rows.join('');
+    }
+
+    function showMyResultsTable() {
+      const R = getResults();
+      const mine = R[state.user] || {};
+      resView.classList.remove('hidden'); dashView.classList.add('hidden'); quizView.classList.add('hidden');
+      $('#result-title').textContent = 'My Results Overview';
+      let html = '<table><tr><th>Chapter</th><th>Score</th><th>Date</th><th>Time</th></tr>';
+      QUIZ_DATA.forEach(c => { const r = mine[c.id]; html += `<tr><td>${c.title}</td><td>${r ? r.score : '/12'}</td><td>${r ? new Date(r.date).toLocaleString() : '—'}</td><td>${r ? fmtTime(r.timeSec) : '—'}</td></tr>`; });
+      html += '</table>';
+      $('#result-summary').innerHTML = '';
+      $('#result-table').innerHTML = html;
+    }
+
+    $('#btn-back-dash').onclick = () => { resView.classList.add('hidden'); dashView.classList.remove('hidden'); };
+
+    /******************** Utils ********************/
+    function fmtTime(sec) { const m = Math.floor(sec / 60), s = sec % 60; return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0'); }
+
+    /******************** Bootstrap ********************/
+    (function () {
+      // Seed default user Raja if not present
+      const defaults = [{ u: 'Raja', p: 'Raja@123' }];
+      let users = loadUsers();
+      defaults.forEach(d => { if (!users.some(x => x.u === d.u)) users.push(d); });
+      saveUsers(users);
+
+      // session restore
+      const u = localStorage.getItem(KEYS.session);
+      if (u) {
+        initAfterLogin(u);
+      } else {
+        authView.classList.remove('hidden');
+        // Pre-fill provided credentials for convenience
+        const un = document.getElementById('auth-username');
+        const pw = document.getElementById('auth-password');
+        if (un && pw) { un.value = 'Raja'; pw.value = 'Raja@123'; }
+      }
+    })();
+  </script>
+</body>
+
+</html>
